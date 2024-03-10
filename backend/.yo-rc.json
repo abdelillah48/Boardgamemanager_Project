@@ -1,0 +1,18 @@
+{
+  "generator-jhipster": {
+    "applicationIndex": 0,
+    "baseName": "boardgamemanager",
+    "creationTimestamp": 1700820860695,
+    "devDatabaseType": "h2Memory",
+    "entities": ["BoardGame", "Category", "Publisher", "Series"],
+    "jhipsterVersion": "8.0.0",
+    "jwtSecretKey": "ZTg0OGNkNmQ0MTc2YTYxZDljNzg5ZDkzYzJmZTRkNWYxOGQ1ZmI1ODhjOTE4ZDllYTUwNWFhZTI4NjhkNmMxZDE2MDA2NjMxMWVmMmYwMDQ5ZDVhMTZkNTM1OWMzMDY4YTBkMGE3YWM1YzU4NzVkZGQzZTg0NjBiODAwODAwODY=",
+    "languages": ["en", "fr"],
+    "lastLiquibaseTimestamp": 1700821079000,
+    "nativeLanguage": "en",
+    "packageFolder": "fr/univnantes/dde/boardgamemanager",
+    "packageName": "fr.univnantes.dde.boardgamemanager",
+    "prodDatabaseType": "postgresql",
+    "skipClient": true
+  }
+}

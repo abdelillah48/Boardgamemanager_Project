@@ -1,0 +1,125 @@
+podman network create data_network
+podman network create back_network
+
+DATABASE ===
+podman container run --rm \
+                       --detach \
+                       --name boardgame_db \
+                       --network data_network \
+                       --volume ./data:/var/lib/postgresql/data \
+                       --publish 5432:5432 \
+                       --env POSTGRES_USER=user1 \
+                       --env POSTGRES_PASSWORD=pwd1234 \
+                       --env POSTGRES_DB=board_db \
+                       docker.io/postgres:16-alpine
+
+
+BACKEND ====
+echo -e "spring: \n \
+  datasource: \n \
+    url: jdbc:postgresql://boardgame_db:5432/board_db \n \
+    username: user1 \n \
+    password: pwd1234" >> backend/application.yml
+
+FROM docker.io/maven:3-eclipse-temurin-17
+
+RUN mkdir backend
+WORKDIR backend
+COPY backend .
+
+RUN mvn --settings ./setting.xml package -Pprod 
+
+
+CMD java -jar target/boardgamemanager-0.0.1-SNAPSHOT.jar
+
+
+
+
+podman image build --file Containerfile_back  --tag boardgamemanager_backend:v1 .
+
+
+
+
+podman container run --rm \
+			--detach \
+			--name boardgame_back \
+			--network data_network \
+			--network back_network \
+			--publish 8080:8080 \
+			boardgamemanager_backend:v1
+			
+
+
+NGINX ===
+server {
+    listen 80;
+    index index.html;
+    server_name localhost;
+    error_log  /var/log/nginx/error.log;
+
+    root /usr/share/nginx/html;
+
+    location /api {
+        proxy_pass http://boardgame_back:8080/api;
+    }
+    location /management {
+        proxy_pass http://boardgame_back:8080/management;
+    }
+    location /swagger-resources {
+        proxy_pass http://boardgame_back:8080/swagger-resources;
+    }
+    location /v2 {
+       proxy_pass http://boardgame_back:8080/v2;
+    }
+    location /auth {
+       proxy_pass http://boardgame_back:8080/auth;
+    }
+
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+}
+
+
+
+FROM docker.io/nginx:mainline-alpine
+
+RUN apk add --update npm
+
+RUN mkdir frontend
+WORKDIR frontend
+COPY frontend .
+
+RUN npm install
+RUN npm run build
+
+RUN rm -rf /usr/share/nginx/html
+RUN mv target/classes/static /usr/share/nginx/html
+RUN rm /etc/nginx/conf.d/default.conf
+RUN mv default.conf /etc/nginx/conf.d
+
+
+
+podman image build --file Containerfile_front  --tag boardgamemanager_front:v1 .
+
+
+podman container run --rm \
+			--detach \
+			--name boardgame_front \
+			--network back_network \
+			--publish 8480:80 \
+			boardgamemanager_front:v1
+			
+			
+			
+PUBLISH ===
+podman login docker-registry.univ-nantes.fr
+
+podman image push localhost/boardgamemanager_backend:v1 \
+                    docker-registry.univ-nantes.fr/e239002k/boardgamemanager/boardgamemanager_backend:v1
+                
+podman image push localhost/boardgamemanager_front:v1 \
+                    docker-registry.univ-nantes.fr/e239002k/boardgamemanager/boardgamemanager_front:v1
+
+			
+			

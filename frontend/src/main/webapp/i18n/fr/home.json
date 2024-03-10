@@ -1,0 +1,9 @@
+{
+  "home": {
+    "title": "Boardgamemanager",
+    "subtitle": "Pour bien connaître vos jeux.",
+    "logged": {
+      "message": "Vous êtes connecté en tant que \"{{username}}\"."
+    }
+  }
+}

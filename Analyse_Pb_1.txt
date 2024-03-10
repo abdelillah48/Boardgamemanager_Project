@@ -1,0 +1,60 @@
+Combien de conteneurs sont nécessaires pour un déploiement du logiciel ? À quoi va servir chaque conteneur dans ce déploiement ?
+Il y a besoin de 3 conteneurs:
+- le server Front (nginx)
+- le Back (Maven/java)
+- La BDD (postgres)
+
+Devez-vous construire des images de conteneurs pour ce déploiement ? Si oui, pour chaque image de conteneur prévue, répondez aux questions suivantes :
+
+Oui 2 images sont à construire
+
+1ere image backend :
+    Quelle image de base utilisez-vous, et pourquoi ?
+
+    Que doit accomplir votre script de construction d’image ?
+
+    Quels fichiers faut-il mettre dans l’image ?
+
+    Si cela est possible, comment procédez-vous pour limiter la taille de l’image ?
+
+    Que doit effectuer le point d’entrée de l’image ?
+
+    Comment doit s’utiliser l’image de conteneur (notamment en terme de variables/montages/ports/publications nécessaires) ?
+
+2eme image front :
+    Quelle image de base utilisez-vous, et pourquoi ?
+
+    Que doit accomplir votre script de construction d’image ?
+
+    Quels fichiers faut-il mettre dans l’image ?
+
+    Si cela est possible, comment procédez-vous pour limiter la taille de l’image ?
+
+    Que doit effectuer le point d’entrée de l’image ?
+
+    Comment doit s’utiliser l’image de conteneur (notamment en terme de variables/montages/ports/publications nécessaires) ?
+
+Pour chaque conteneur prévu pour votre déploiement, décrivez :
+
+    Les réseaux virtuels auxquels il doit être connecté,
+
+    Les montages de répertoires/fichiers que vous devez effectuer,
+
+    Les variables d’environnement que vous devez confier au conteneur, et avec quelles valeurs,
+
+    Les publications de port qui doivent être effectuées.
+
+Enfin, faites la synthèse de votre analyse sous la forme d’un schéma visuel qui décrit votre déploiement, en y faisant bien apparaître :
+
+    Les machines,
+
+    Les conteneurs,
+
+    Les logiciels,
+
+    Les réseaux virtuels,
+
+    Les montages de répertoires/fichiers,
+
+    Les publications de port.
+
